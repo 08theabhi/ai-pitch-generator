@@ -14,7 +14,13 @@ export function useAuth() {
     return unsubscribe
   }, [])
 
-  const login = () => blink.auth.login()
+  // Login with the current URL as redirect destination
+  // This ensures the user returns to the correct domain (Vercel, Blink, etc.)
+  const login = () => {
+    const redirectUrl = window.location.origin + window.location.pathname
+    blink.auth.login(redirectUrl)
+  }
+  
   const logout = () => blink.auth.signOut()
 
   return { user, loading, login, logout, isAuthenticated: !!user }
